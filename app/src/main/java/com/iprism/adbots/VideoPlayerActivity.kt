@@ -1,9 +1,9 @@
 package com.iprism.adbots
 
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.annotation.OptIn
-import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
@@ -23,15 +23,28 @@ class VideoPlayerActivity : ComponentActivity() {
 
         playerView = findViewById(R.id.player_view)
 
-        initializePlayer()
+        // Detect if device is TV
+        val isTV = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
+
+        // Adjust rotation and scale for Mobile vs TV
+        if (!isTV) {
+            playerView.rotation = 0f
+        } else {
+            // Assuming 270 is your TV requirement based on previous edits
+            playerView.rotation = 270f
+            playerView.scaleX = 2.0f
+            playerView.scaleY = 2.0f
+        }
+
+        initializePlayer(isTV)
     }
 
     @OptIn(UnstableApi::class)
-    private fun initializePlayer() {
+    private fun initializePlayer(isTV: Boolean) {
         val videoList = listOf(
-            "https://littlepebbles.co.in/videos/video3.mp4",
             "https://littlepebbles.co.in/videos/video1.mp4",
-            "https://littlepebbles.co.in/videos/video2.mp4"
+            "https://littlepebbles.co.in/videos/video2.mp4",
+            "https://littlepebbles.co.in/videos/video3.mp4"
         )
 
         val loadControl = DefaultLoadControl.Builder()
@@ -45,13 +58,23 @@ class VideoPlayerActivity : ComponentActivity() {
                 val mediaItems = videoList.map { url -> MediaItem.fromUri(url) }
                 setMediaItems(mediaItems)
                 repeatMode = ExoPlayer.REPEAT_MODE_ALL
-                videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+
+                videoScalingMode = if (isTV) {
+                    C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+                } else {
+                    C.VIDEO_SCALING_MODE_SCALE_TO_FIT
+                }
+
                 prepare()
                 playWhenReady = true
             }
 
         playerView.player = player
         playerView.keepScreenOn = true
+
+        if (isTV) {
+            playerView.requestFocus()
+        }
     }
 
     override fun onStart() {
