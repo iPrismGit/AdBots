@@ -27,7 +27,13 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Adbots"
-            android:banner="@drawable/ic_launcher_background">
+            android:banner="@drawable/ic_launcher_background" />
+
+        <activity
+            android:name=".VideoPlayerActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|layoutDirection|screenLayout"
+            android:theme="@style/Theme.Adbots">
 
             <!-- Mobile launcher -->
             <intent-filter>
