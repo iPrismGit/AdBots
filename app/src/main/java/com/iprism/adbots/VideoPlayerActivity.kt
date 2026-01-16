@@ -32,8 +32,8 @@ class VideoPlayerActivity : ComponentActivity() {
         } else {
             // Assuming 270 is your TV requirement based on previous edits
             playerView.rotation = 270f
-            playerView.scaleX = 2.0f
-            playerView.scaleY = 2.0f
+            playerView.scaleX = 1.8f
+            playerView.scaleY = 1.8f
         }
 
         initializePlayer(isTV)
@@ -42,9 +42,12 @@ class VideoPlayerActivity : ComponentActivity() {
     @OptIn(UnstableApi::class)
     private fun initializePlayer(isTV: Boolean) {
         val videoList = listOf(
-            "https://littlepebbles.co.in/videos/video1.mp4",
+            /*"https://littlepebbles.co.in/videos/video1.mp4",
             "https://littlepebbles.co.in/videos/video2.mp4",
-            "https://littlepebbles.co.in/videos/video3.mp4"
+            "https://littlepebbles.co.in/videos/video3.mp4"*/
+            "https://kaamhaina.in/assets/admin/newvideos/1.mp4",
+            "https://kaamhaina.in/assets/admin/newvideos/2.mp4",
+            "https://kaamhaina.in/assets/admin/newvideos/3.mp4"
         )
 
         val loadControl = DefaultLoadControl.Builder()
