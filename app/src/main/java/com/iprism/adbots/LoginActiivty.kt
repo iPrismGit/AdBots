@@ -25,6 +25,8 @@ class LoginActiivty : ComponentActivity() {
     private fun handleConfirmBtn() {
         binding.confirmBtn.setOnClickListener{
             if (getCode() == "604020") {
+                val user = User(this)
+                user.loginUser()
                 val intent = Intent(this, VideoPlayerActivity::class.java)
                 startActivity(intent)
             } else {
