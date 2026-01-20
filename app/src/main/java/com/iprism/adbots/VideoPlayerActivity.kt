@@ -72,7 +72,7 @@ class VideoPlayerActivity : ComponentActivity() {
                 }
             }
 
-         /*   override fun onPlaybackStateChanged(state: Int) {
+          /*  override fun onPlaybackStateChanged(state: Int) {
                 when (state) {
                     Player.STATE_READY -> {
                         if (player!!.playWhenReady) showOnlineStatus()
