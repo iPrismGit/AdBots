@@ -63,7 +63,6 @@ class VideoPlayerActivity : ComponentActivity() {
                 playWhenReady = true
             }
         player!!.addListener(object : Player.Listener {
-
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 if (isPlaying) {
                     showOnlineStatus()
