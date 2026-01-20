@@ -63,6 +63,7 @@ class VideoPlayerActivity : ComponentActivity() {
                 playWhenReady = true
             }
         player!!.addListener(object : Player.Listener {
+
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 if (isPlaying) {
                     showOnlineStatus()
@@ -70,6 +71,19 @@ class VideoPlayerActivity : ComponentActivity() {
                     showOfflineStatus()
                 }
             }
+
+         /*   override fun onPlaybackStateChanged(state: Int) {
+                when (state) {
+                    Player.STATE_READY -> {
+                        if (player!!.playWhenReady) showOnlineStatus()
+                    }
+                    Player.STATE_BUFFERING,
+                    Player.STATE_IDLE,
+                    Player.STATE_ENDED -> {
+                        showOfflineStatus()
+                    }
+                }
+            }*/
         })
         playerView.player = player
         playerView.keepScreenOn = true
