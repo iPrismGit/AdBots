@@ -12,28 +12,31 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import com.iprism.adbots.databinding.ActivityVideoPlayerBinding
 
 class VideoPlayerActivity : ComponentActivity() {
 
     private var player: ExoPlayer? = null
-    private lateinit var playerView: PlayerView
+    private lateinit var binding: ActivityVideoPlayerBinding
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video_player)
-        playerView = findViewById(R.id.player_view)
+        binding = ActivityVideoPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         val isTV = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
         if (!isTV) {
-            playerView.rotation = 0f
+            binding.playerView.rotation = 0f
         } else {
-            playerView.rotation = 270f
-            playerView.scaleX = 1.8f
-            playerView.scaleY = 1.8f
+            binding.playerView.rotation = 270f
+            binding.playerView.scaleX = 1.8f
+            binding.playerView.scaleY = 1.8f
         }
 
         initializePlayer(isTV)
     }
+
+
 
     @OptIn(UnstableApi::class)
     private fun initializePlayer(isTV: Boolean) {
@@ -85,10 +88,10 @@ class VideoPlayerActivity : ComponentActivity() {
                 }
             }*/
         })
-        playerView.player = player
-        playerView.keepScreenOn = true
+        binding.playerView.player = player
+        binding.playerView.keepScreenOn = true
         if (isTV) {
-            playerView.requestFocus()
+            binding.playerView.requestFocus()
         }
     }
 
