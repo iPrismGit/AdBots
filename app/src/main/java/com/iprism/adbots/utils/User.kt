@@ -1,4 +1,4 @@
-package com.iprism.adbots
+package com.iprism.adbots.utils
 
 import android.content.Context
 import android.content.SharedPreferences

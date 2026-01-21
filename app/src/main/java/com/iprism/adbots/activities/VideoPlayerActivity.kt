@@ -1,4 +1,4 @@
-package com.iprism.adbots
+package com.iprism.adbots.activities
 
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
@@ -13,7 +13,6 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
 import com.iprism.adbots.databinding.ActivityVideoPlayerBinding
 import com.iprism.adbots.repository.AdsRepository
 import com.iprism.adbots.utils.UiState

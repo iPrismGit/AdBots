@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
-import com.iprism.adbots.User
+import com.iprism.adbots.utils.User
 
 fun Context.showToast(message: String?) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()

@@ -1,16 +1,13 @@
-package com.iprism.adbots
+package com.iprism.adbots.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
-import com.iprism.adbots.databinding.ActivityLoginActiivtyBinding
 import com.iprism.adbots.databinding.ActivitySplashBinding
+import com.iprism.adbots.utils.User
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
