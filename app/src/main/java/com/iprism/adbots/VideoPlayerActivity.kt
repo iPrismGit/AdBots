@@ -1,10 +1,12 @@
 package com.iprism.adbots
 
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.annotation.OptIn
+import androidx.lifecycle.ViewModelProvider
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -13,11 +15,18 @@ import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.iprism.adbots.databinding.ActivityVideoPlayerBinding
+import com.iprism.adbots.repository.AdsRepository
+import com.iprism.adbots.utils.UiState
+import com.iprism.adbots.utils.hideProgress
+import com.iprism.adbots.utils.showProgress
+import com.iprism.adbots.viewmodels.ViewModelFactory
+import com.iprism.adbots.viewmodels.WalletViewModel
 
 class VideoPlayerActivity : ComponentActivity() {
 
     private var player: ExoPlayer? = null
     private lateinit var binding: ActivityVideoPlayerBinding
+    private lateinit var viewModel: WalletViewModel
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +43,9 @@ class VideoPlayerActivity : ComponentActivity() {
         }
 
         initializePlayer(isTV)
+        initViewModel()
+        observeResponse()
+        fetchViewAds()
     }
 
 
@@ -117,5 +129,37 @@ class VideoPlayerActivity : ComponentActivity() {
 
     private fun showOfflineStatus() {
         Log.d("VIDEO_STATUS", "⚪ OFFLINE (Video Not Playing)")
+    }
+
+    private fun initViewModel() {
+        val repository = AdsRepository()
+        val factory = ViewModelFactory { WalletViewModel(repository) }
+        viewModel = ViewModelProvider(this, factory)[WalletViewModel::class.java]
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun observeResponse() {
+        viewModel.response.observe(this) { result ->
+            when (result) {
+                is UiState.Loading -> {
+                    binding.progress.showProgress()
+                }
+
+                is UiState.Success -> {
+                    binding.progress.hideProgress()
+                    Log.d("viewAdsresponse", result.data.response.toString())
+                }
+
+                is UiState.Error -> {
+                    binding.progress.hideProgress()
+                }
+            }
+        }
+    }
+
+    private fun fetchViewAds() {
+        NetworkRetryHelper.checkAndCallWithRetry(this) {
+            viewModel.fetchAds()
+        }
     }
 }

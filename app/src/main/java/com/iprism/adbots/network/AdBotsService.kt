@@ -1,7 +1,11 @@
 package com.iprism.adbots.network
 
+import com.iprism.adbots.models.ViewAdsApiResponse
+import com.iprism.adbots.utils.Constants
+import retrofit2.http.GET
+
 interface AdBotsService {
 
-   /* @POST(Constants.LOGIN_ENDPOINT)
-    suspend fun login(@Body loginRequest: LoginRequest) : LoginApiResponse*/
+    @GET(Constants.VIEW_ADDS_ENDPOINT)
+    suspend fun fetchViewAds() : ViewAdsApiResponse
 }
