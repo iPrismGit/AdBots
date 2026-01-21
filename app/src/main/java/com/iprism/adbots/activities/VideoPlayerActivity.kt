@@ -14,7 +14,9 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import com.iprism.adbots.databinding.ActivityVideoPlayerBinding
+import com.iprism.adbots.models.ResponseItem
 import com.iprism.adbots.repository.AdsRepository
+import com.iprism.adbots.utils.Constants
 import com.iprism.adbots.utils.UiState
 import com.iprism.adbots.utils.hideProgress
 import com.iprism.adbots.utils.showProgress
@@ -32,16 +34,6 @@ class VideoPlayerActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityVideoPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val isTV = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
-        if (!isTV) {
-            binding.playerView.rotation = 0f
-        } else {
-            binding.playerView.rotation = 270f
-            binding.playerView.scaleX = 1.8f
-            binding.playerView.scaleY = 1.8f
-        }
-
-        initializePlayer(isTV)
         initViewModel()
         observeResponse()
         fetchViewAds()
@@ -50,22 +42,15 @@ class VideoPlayerActivity : ComponentActivity() {
 
 
     @OptIn(UnstableApi::class)
-    private fun initializePlayer(isTV: Boolean) {
-        val videoList = listOf(
-            "https://kaamhaina.in/assets/admin/newvideos/1.mp4",
-            "https://kaamhaina.in/assets/admin/newvideos/2.mp4",
-            "https://kaamhaina.in/assets/admin/newvideos/3.mp4"
-        )
-
+    private fun initializePlayer(isTV: Boolean, videos : List<ResponseItem>) {
         val loadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(30000, 60000, 5000, 10000)
             .build()
-
         player = ExoPlayer.Builder(this)
             .setLoadControl(loadControl)
             .build()
             .apply {
-                val mediaItems = videoList.map { url -> MediaItem.fromUri(url) }
+                val mediaItems = videos.map { response -> MediaItem.fromUri(Constants.IMAGES_BASE_URL + response.adLink) }
                 setMediaItems(mediaItems)
                 repeatMode = ExoPlayer.REPEAT_MODE_ALL
                 videoScalingMode = if (isTV) {
@@ -145,8 +130,17 @@ class VideoPlayerActivity : ComponentActivity() {
                 }
 
                 is UiState.Success -> {
-                    binding.progress.hideProgress()
                     Log.d("viewAdsresponse", result.data.response.toString())
+                    val isTV = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
+                    if (!isTV) {
+                        binding.playerView.rotation = 0f
+                    } else {
+                        binding.playerView.rotation = 270f
+                        binding.playerView.scaleX = 1.8f
+                        binding.playerView.scaleY = 1.8f
+                    }
+                    initializePlayer(isTV, result.data.response)
+                    binding.progress.hideProgress()
                 }
 
                 is UiState.Error -> {
