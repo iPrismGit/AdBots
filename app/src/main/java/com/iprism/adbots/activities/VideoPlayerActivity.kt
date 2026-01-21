@@ -130,7 +130,7 @@ class VideoPlayerActivity : ComponentActivity() {
                 }
 
                 is UiState.Success -> {
-                    Log.d("viewAdsresponse", result.data.response.toString())
+                    Log.d("viewAdsResponse", result.data.response.toString())
                     val isTV = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
                     if (!isTV) {
                         binding.playerView.rotation = 0f
