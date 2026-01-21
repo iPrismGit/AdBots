@@ -21,13 +21,13 @@ import com.iprism.adbots.utils.UiState
 import com.iprism.adbots.utils.hideProgress
 import com.iprism.adbots.utils.showProgress
 import com.iprism.adbots.viewmodels.ViewModelFactory
-import com.iprism.adbots.viewmodels.WalletViewModel
+import com.iprism.adbots.viewmodels.AdsViewModel
 
 class VideoPlayerActivity : ComponentActivity() {
 
     private var player: ExoPlayer? = null
     private lateinit var binding: ActivityVideoPlayerBinding
-    private lateinit var viewModel: WalletViewModel
+    private lateinit var viewModel: AdsViewModel
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,8 +117,8 @@ class VideoPlayerActivity : ComponentActivity() {
 
     private fun initViewModel() {
         val repository = AdsRepository()
-        val factory = ViewModelFactory { WalletViewModel(repository) }
-        viewModel = ViewModelProvider(this, factory)[WalletViewModel::class.java]
+        val factory = ViewModelFactory { AdsViewModel(repository) }
+        viewModel = ViewModelProvider(this, factory)[AdsViewModel::class.java]
     }
 
     @SuppressLint("SetTextI18n")

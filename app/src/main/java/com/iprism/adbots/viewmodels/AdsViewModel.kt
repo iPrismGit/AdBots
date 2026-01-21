@@ -9,7 +9,7 @@ import com.iprism.adbots.repository.AdsRepository
 import com.iprism.adbots.utils.UiState
 import kotlinx.coroutines.launch
 
-class WalletViewModel(private val repository: AdsRepository) : ViewModel() {
+class AdsViewModel(private val repository: AdsRepository) : ViewModel() {
 
     private val _response = MutableLiveData<UiState<ViewAdsApiResponse>>()
     val response: LiveData<UiState<ViewAdsApiResponse>> = _response
