@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.widget.FrameLayout
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +16,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
+import com.iprism.adbots.R
 import com.iprism.adbots.databinding.ActivityVideoPlayerBinding
 import com.iprism.adbots.models.ResponseItem
 import com.iprism.adbots.repository.AdsRepository
@@ -87,7 +91,30 @@ class VideoPlayerActivity : ComponentActivity() {
         if (isTV) {
             binding.playerView.requestFocus()
         }
+        addWatermark(isTV)
     }
+
+    private fun addWatermark(isTV: Boolean) {
+        val logo = ImageView(this).apply {
+            setImageResource(R.drawable.ic_launcher_background)
+            layoutParams = FrameLayout.LayoutParams(80, 80).apply {
+                gravity = Gravity.TOP or Gravity.CENTER
+                // TV needs extra inset because of rotation + scale
+                setMargins(150,  16, 16, 16)
+            }
+            elevation = 100f
+        }
+
+        binding.playerView.post {
+            binding.playerView.overlayFrameLayout?.addView(logo)
+
+            if (isTV) {
+                // overlay does NOT inherit rotation
+                logo.rotation = binding.playerView.rotation
+            }
+        }
+    }
+
 
     override fun onStart() {
         super.onStart()
