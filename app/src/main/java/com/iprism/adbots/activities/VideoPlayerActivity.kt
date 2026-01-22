@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Gravity
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModelProvider
@@ -19,9 +20,12 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.iprism.adbots.R
 import com.iprism.adbots.databinding.ActivityVideoPlayerBinding
 import com.iprism.adbots.models.ResponseItem
+import com.iprism.adbots.models.updatedevicestatus.UpdateDeviceStatusRequest
 import com.iprism.adbots.repository.AdsRepository
 import com.iprism.adbots.utils.Constants
 import com.iprism.adbots.utils.UiState
+import com.iprism.adbots.utils.User
+import com.iprism.adbots.utils.getUserDetails
 import com.iprism.adbots.utils.hideProgress
 import com.iprism.adbots.utils.showProgress
 import com.iprism.adbots.viewmodels.ViewModelFactory
@@ -40,6 +44,7 @@ class VideoPlayerActivity : ComponentActivity() {
         setContentView(binding.root)
         initViewModel()
         observeResponse()
+        observeUpdateDeviceResponseResponse()
         fetchViewAds()
     }
 
@@ -67,9 +72,9 @@ class VideoPlayerActivity : ComponentActivity() {
 
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 if (isPlaying) {
-                    showOnlineStatus()
+                    updateDeviceStatus("online")
                 } else {
-                    showOfflineStatus()
+                    updateDeviceStatus("offline")
                 }
             }
 
@@ -132,14 +137,6 @@ class VideoPlayerActivity : ComponentActivity() {
         player = null
     }
 
-    private fun showOnlineStatus() {
-        Log.d("VIDEO_STATUS", "🟢 ONLINE (Video Playing)")
-    }
-
-    private fun showOfflineStatus() {
-        Log.d("VIDEO_STATUS", "⚪ OFFLINE (Video Not Playing)")
-    }
-
     private fun initViewModel() {
         val repository = AdsRepository()
         val factory = ViewModelFactory { AdsViewModel(repository) }
@@ -169,6 +166,7 @@ class VideoPlayerActivity : ComponentActivity() {
                 }
 
                 is UiState.Error -> {
+                    Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                     binding.progress.hideProgress()
                 }
             }
@@ -179,5 +177,32 @@ class VideoPlayerActivity : ComponentActivity() {
         NetworkRetryHelper.checkAndCallWithRetry(this) {
             viewModel.fetchAds()
         }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun observeUpdateDeviceResponseResponse() {
+        viewModel.updateDeviceStatusResponse.observe(this) { result ->
+            when (result) {
+                is UiState.Loading -> {
+                }
+
+                is UiState.Success -> {
+                    Log.d("updateDeviceStatusResponse", result.data.toString())
+                }
+
+                is UiState.Error -> {
+                    Log.d("updateDeviceStatusResponse", result.message)
+                }
+            }
+        }
+    }
+
+    private fun updateDeviceStatus(status : String) {
+        val userDetails = getUserDetails()
+        val request = UpdateDeviceStatusRequest( status, userDetails[User.ID].toString())
+        NetworkRetryHelper.checkAndCallWithRetry(this, request) {
+            viewModel.updateDeviceStatus(request)
+        }
+        Log.d("requestLoading", request.toString())
     }
 }

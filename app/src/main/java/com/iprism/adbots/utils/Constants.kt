@@ -7,4 +7,5 @@ object Constants {
 
     const val VIEW_ADDS_ENDPOINT = "view_ads"
     const val LOGIN_ENDPOINT = "user_login"
+    const val UPDATE_DEVICE_STATUS_ENDPOINT = "update_device_status"
 }
