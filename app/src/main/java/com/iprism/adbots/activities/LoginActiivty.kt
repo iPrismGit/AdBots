@@ -73,6 +73,7 @@ class LoginActiivty : ComponentActivity() {
                 is UiState.Success -> {
                     binding.progress.hideProgress()
                     val user = User(this)
+                    user.storeUserDetails(result.data.response.userDetails.id, result.data.response.userDetails.token, result.data.response.userDetails.userName)
                     user.loginUser()
                     val intent = Intent(this, VideoPlayerActivity::class.java)
                     startActivity(intent)

@@ -45,7 +45,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:gravity="center"
-                    android:text="AddBots Logo"
+                    android:text="AdBots Logo"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 

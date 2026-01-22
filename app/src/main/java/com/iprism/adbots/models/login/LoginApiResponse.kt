@@ -44,5 +44,5 @@ data class UserDetailsItem(
 data class Response(
 
 	@field:SerializedName("user_details")
-	val userDetails: List<UserDetailsItem>
+	val userDetails: UserDetailsItem
 )

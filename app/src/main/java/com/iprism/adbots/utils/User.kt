@@ -16,10 +16,10 @@ class User(var context: Context) {
         editor = sharedPreferences.edit()
     }
 
-    fun storeUserDetails(id: String?, authToken: String?, mobile : String?) {
+    fun storeUserDetails(id: String?, authToken: String?, userName : String?) {
         editor.putString(ID, id)
         editor.putString(AUTH_TOKEN, authToken)
-        editor.putString(MOBILE, mobile)
+        editor.putString(MOBILE, userName)
         editor.commit()
     }
 
