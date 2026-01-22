@@ -39,8 +39,6 @@ class VideoPlayerActivity : ComponentActivity() {
         fetchViewAds()
     }
 
-
-
     @OptIn(UnstableApi::class)
     private fun initializePlayer(isTV: Boolean, videos : List<ResponseItem>) {
         val loadControl = DefaultLoadControl.Builder()
