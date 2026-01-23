@@ -53,6 +53,7 @@ class VideoPlayerActivity : ComponentActivity() {
         observeResponse()
         observeUpdateDeviceResponseResponse()
         fetchViewAds()
+        updateDeviceStatus("online")
     }
 
     @OptIn(UnstableApi::class)
@@ -79,7 +80,7 @@ class VideoPlayerActivity : ComponentActivity() {
 
             override fun onIsPlayingChanged(isPlaying: Boolean) {
                 if (isPlaying) {
-                    updateDeviceStatus("online")
+                    //updateDeviceStatus("online")
                 } else {
                     //updateDeviceStatus("offline")
                 }
@@ -128,10 +129,26 @@ class VideoPlayerActivity : ComponentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("VideoPlayerActivity", "onResume")
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("VideoPlayerActivity", "onRestart")
+        updateDeviceStatus("online")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("VideoPlayerActivity", "onPause")
+    }
 
     override fun onStart() {
         super.onStart()
         player?.play()
+        Log.d("VideoPlayerActivity", "onStart")
     }
 
     override fun onStop() {
@@ -139,10 +156,10 @@ class VideoPlayerActivity : ComponentActivity() {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        /*val workRequest = OneTimeWorkRequestBuilder<DeviceStatusWorker>()
-            .setConstraints(constraints)
-            .build()*/
         val workRequest = OneTimeWorkRequestBuilder<DeviceStatusWorker>()
+            .setConstraints(constraints)
+            .build()
+        /*val workRequest = OneTimeWorkRequestBuilder<DeviceStatusWorker>()
             .setInitialDelay(15, TimeUnit.SECONDS)
             .setConstraints(constraints)
             .setBackoffCriteria(
@@ -150,7 +167,7 @@ class VideoPlayerActivity : ComponentActivity() {
                 30,
                 TimeUnit.SECONDS
             )
-            .build()
+            .build()*/
 
         WorkManager.getInstance(applicationContext).enqueue(workRequest)
         Log.d("VideoPlayerActivity", "onStop")
