@@ -17,6 +17,7 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
@@ -35,6 +36,7 @@ import com.iprism.adbots.utils.hideProgress
 import com.iprism.adbots.utils.showProgress
 import com.iprism.adbots.viewmodels.ViewModelFactory
 import com.iprism.adbots.viewmodels.AdsViewModel
+import java.util.concurrent.TimeUnit
 
 class VideoPlayerActivity : ComponentActivity() {
 
@@ -137,8 +139,17 @@ class VideoPlayerActivity : ComponentActivity() {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val workRequest = OneTimeWorkRequestBuilder<DeviceStatusWorker>()
+        /*val workRequest = OneTimeWorkRequestBuilder<DeviceStatusWorker>()
             .setConstraints(constraints)
+            .build()*/
+        val workRequest = OneTimeWorkRequestBuilder<DeviceStatusWorker>()
+            .setInitialDelay(15, TimeUnit.SECONDS) // 🔑 FIX
+            .setConstraints(constraints)
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                30,
+                TimeUnit.SECONDS
+            )
             .build()
 
         WorkManager.getInstance(applicationContext).enqueue(workRequest)
