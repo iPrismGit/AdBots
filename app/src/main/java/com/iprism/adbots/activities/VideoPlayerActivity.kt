@@ -17,12 +17,17 @@ import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.iprism.adbots.R
 import com.iprism.adbots.databinding.ActivityVideoPlayerBinding
 import com.iprism.adbots.models.ResponseItem
 import com.iprism.adbots.models.updatedevicestatus.UpdateDeviceStatusRequest
 import com.iprism.adbots.repository.AdsRepository
 import com.iprism.adbots.utils.Constants
+import com.iprism.adbots.utils.DeviceStatusWorker
 import com.iprism.adbots.utils.UiState
 import com.iprism.adbots.utils.User
 import com.iprism.adbots.utils.getUserDetails
@@ -99,6 +104,7 @@ class VideoPlayerActivity : ComponentActivity() {
         addWatermark(isTV)
     }
 
+    @OptIn(UnstableApi::class)
     private fun addWatermark(isTV: Boolean) {
         val logo = ImageView(this).apply {
             setImageResource(R.drawable.ic_launcher_background)
@@ -127,11 +133,22 @@ class VideoPlayerActivity : ComponentActivity() {
     }
 
     override fun onStop() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val workRequest = OneTimeWorkRequestBuilder<DeviceStatusWorker>()
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance(applicationContext).enqueue(workRequest)
+        Log.d("VideoPlayerActivity", "onStop")
         super.onStop()
         player?.pause()
     }
 
     override fun onDestroy() {
+        Log.d("VideoPlayerActivity", "onDestroy")
         super.onDestroy()
         player?.release()
         player = null

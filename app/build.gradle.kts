@@ -58,6 +58,8 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.androidx.work.runtime.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
