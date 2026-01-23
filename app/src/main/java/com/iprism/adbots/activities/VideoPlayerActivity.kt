@@ -79,7 +79,7 @@ class VideoPlayerActivity : ComponentActivity() {
                 if (isPlaying) {
                     updateDeviceStatus("online")
                 } else {
-                    updateDeviceStatus("offline")
+                    //updateDeviceStatus("offline")
                 }
             }
 
