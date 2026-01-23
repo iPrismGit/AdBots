@@ -143,7 +143,7 @@ class VideoPlayerActivity : ComponentActivity() {
             .setConstraints(constraints)
             .build()*/
         val workRequest = OneTimeWorkRequestBuilder<DeviceStatusWorker>()
-            .setInitialDelay(15, TimeUnit.SECONDS) // 🔑 FIX
+            .setInitialDelay(15, TimeUnit.SECONDS)
             .setConstraints(constraints)
             .setBackoffCriteria(
                 BackoffPolicy.EXPONENTIAL,
