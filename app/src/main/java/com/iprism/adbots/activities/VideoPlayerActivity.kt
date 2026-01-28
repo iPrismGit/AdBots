@@ -110,13 +110,12 @@ class VideoPlayerActivity : ComponentActivity() {
     @OptIn(UnstableApi::class)
     private fun addWatermark(isTV: Boolean) {
         val logo = ImageView(this).apply {
-            setImageResource(R.drawable.ic_launcher_background)
-            layoutParams = FrameLayout.LayoutParams(80, 80).apply {
+            setImageResource(R.drawable.adbots2)
+            layoutParams = FrameLayout.LayoutParams(200, 200).apply {
                 gravity = Gravity.TOP or Gravity.CENTER
                 // TV needs extra inset because of rotation + scale
-                setMargins(150,  16, 16, 16)
+                setMargins(16,  240, 16, 16)
             }
-            elevation = 100f
         }
 
         binding.playerView.post {
