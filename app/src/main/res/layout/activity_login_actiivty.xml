@@ -37,17 +37,7 @@
                     android:adjustViewBounds="true"
                     android:maxWidth="200dp"
                     android:maxHeight="200dp"
-                    android:src="@drawable/ic_launcher_background" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:gravity="center"
-                    android:text="AdBots Logo"
-                    android:textColor="@color/black"
-                    android:textStyle="bold" />
+                    android:src="@drawable/adbots1" />
 
             </LinearLayout>
 
