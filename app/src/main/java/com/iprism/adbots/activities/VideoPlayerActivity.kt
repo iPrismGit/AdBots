@@ -57,7 +57,7 @@ class VideoPlayerActivity : ComponentActivity() {
     }
 
     @OptIn(UnstableApi::class)
-    private fun initializePlayer(isTV: Boolean, videos : List<ResponseItem>) {
+    private fun initializePlayer(isTV: Boolean, videos: List<ResponseItem>) {
         val loadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(30000, 60000, 5000, 10000)
             .build()
@@ -65,7 +65,8 @@ class VideoPlayerActivity : ComponentActivity() {
             .setLoadControl(loadControl)
             .build()
             .apply {
-                val mediaItems = videos.map { response -> MediaItem.fromUri(Constants.IMAGES_BASE_URL + response.adLink) }
+                val mediaItems =
+                    videos.map { response -> MediaItem.fromUri(Constants.IMAGES_BASE_URL + response.adLink) }
                 setMediaItems(mediaItems)
                 repeatMode = ExoPlayer.REPEAT_MODE_ALL
                 videoScalingMode = if (isTV) {
@@ -86,18 +87,18 @@ class VideoPlayerActivity : ComponentActivity() {
                 }
             }
 
-          /*  override fun onPlaybackStateChanged(state: Int) {
-                when (state) {
-                    Player.STATE_READY -> {
-                        if (player!!.playWhenReady) showOnlineStatus()
-                    }
-                    Player.STATE_BUFFERING,
-                    Player.STATE_IDLE,
-                    Player.STATE_ENDED -> {
-                        showOfflineStatus()
-                    }
-                }
-            }*/
+            /*  override fun onPlaybackStateChanged(state: Int) {
+                  when (state) {
+                      Player.STATE_READY -> {
+                          if (player!!.playWhenReady) showOnlineStatus()
+                      }
+                      Player.STATE_BUFFERING,
+                      Player.STATE_IDLE,
+                      Player.STATE_ENDED -> {
+                          showOfflineStatus()
+                      }
+                  }
+              }*/
         })
         binding.playerView.player = player
         binding.playerView.keepScreenOn = true
@@ -112,19 +113,23 @@ class VideoPlayerActivity : ComponentActivity() {
         val logo = ImageView(this).apply {
             setImageResource(R.drawable.adbots2)
             layoutParams = FrameLayout.LayoutParams(200, 200).apply {
-                gravity = Gravity.TOP or Gravity.CENTER
-                // TV needs extra inset because of rotation + scale
-                setMargins(16,  240, 16, 16)
+                if (isTV) {
+                    gravity = Gravity.TOP or Gravity.CENTER
+                    setMargins(0, 32, 0, 0)
+                } else{
+                    gravity = Gravity.TOP or Gravity.END
+                    setMargins(0, 200, 32, 0)
+                }
             }
         }
 
         binding.playerView.post {
             binding.playerView.overlayFrameLayout?.addView(logo)
 
-            if (isTV) {
+           /* if (isTV) {
                 // overlay does NOT inherit rotation
                 logo.rotation = binding.playerView.rotation
-            }
+            }*/
         }
     }
 
@@ -241,9 +246,9 @@ class VideoPlayerActivity : ComponentActivity() {
         }
     }
 
-    private fun updateDeviceStatus(status : String) {
+    private fun updateDeviceStatus(status: String) {
         val userDetails = getUserDetails()
-        val request = UpdateDeviceStatusRequest( status, userDetails[User.ID].toString())
+        val request = UpdateDeviceStatusRequest(status, userDetails[User.ID].toString())
         NetworkRetryHelper.checkAndCallWithRetry(this, request) {
             viewModel.updateDeviceStatus(request)
         }
