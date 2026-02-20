@@ -115,7 +115,7 @@ class VideoPlayerActivity : ComponentActivity() {
             layoutParams = FrameLayout.LayoutParams(200, 200).apply {
                 if (isTV) {
                     gravity = Gravity.TOP or Gravity.CENTER
-                    setMargins(0, 32, 0, 0)
+                    setMargins(0, 12, 0, 0)
                 } else{
                     gravity = Gravity.TOP or Gravity.END
                     setMargins(0, 200, 32, 0)
