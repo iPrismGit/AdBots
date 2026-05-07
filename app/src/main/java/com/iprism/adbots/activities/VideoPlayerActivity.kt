@@ -120,7 +120,7 @@ class VideoPlayerActivity : ComponentActivity() {
     @OptIn(UnstableApi::class)
     private fun addWatermark(isTV: Boolean) {
         val logo = ImageView(this).apply {
-            setImageResource(R.drawable.adbots2)
+            setImageResource(R.drawable.adbots1)
             layoutParams = FrameLayout.LayoutParams(200, 200).apply {
                 if (isTV) {
                     gravity = Gravity.TOP or Gravity.CENTER
