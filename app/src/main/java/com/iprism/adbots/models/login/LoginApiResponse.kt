@@ -38,7 +38,10 @@ data class UserDetailsItem(
 	val token: String,
 
 	@field:SerializedName("status")
-	val status: String
+	val status: String,
+
+	@field:SerializedName("auth_token")
+	val authToken: String
 )
 
 data class Response(
