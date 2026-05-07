@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class ViewAdsApiResponse(
 
 	@field:SerializedName("response")
-	val response: List<ResponseItem>,
+	val response: ResponseItem,
 
 	@field:SerializedName("message")
 	val message: String,

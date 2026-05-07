@@ -4,6 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class ResponseItem(
 
+	@field:SerializedName("ads")
+	val ads: List<Ads>,
+)
+
+data class Ads(
 	@field:SerializedName("created_on")
 	val createdOn: String,
 

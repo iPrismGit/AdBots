@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iprism.adbots.models.ViewAdsApiResponse
+import com.iprism.adbots.models.ViewAdsRequest
 import com.iprism.adbots.models.updatedevicestatus.UpdateDeviceStatusApiResponse
 import com.iprism.adbots.models.updatedevicestatus.UpdateDeviceStatusRequest
 import com.iprism.adbots.repository.AdsRepository
@@ -36,11 +37,11 @@ class AdsViewModel(private val repository: AdsRepository) : ViewModel() {
         }
     }
 
-    fun fetchAds() {
+    fun fetchAds(req : ViewAdsRequest) {
         viewModelScope.launch {
             _response.value = UiState.Loading
             try {
-                val response = repository.fetchAds()
+                val response = repository.fetchAds(req)
                 if (response.status) {
                     _response.value = UiState.Success(response)
                 } else {

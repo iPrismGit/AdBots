@@ -24,7 +24,9 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.iprism.adbots.R
 import com.iprism.adbots.databinding.ActivityVideoPlayerBinding
+import com.iprism.adbots.models.Ads
 import com.iprism.adbots.models.ResponseItem
+import com.iprism.adbots.models.ViewAdsRequest
 import com.iprism.adbots.models.updatedevicestatus.UpdateDeviceStatusRequest
 import com.iprism.adbots.repository.AdsRepository
 import com.iprism.adbots.utils.Constants
@@ -57,7 +59,7 @@ class VideoPlayerActivity : ComponentActivity() {
     }
 
     @OptIn(UnstableApi::class)
-    private fun initializePlayer(isTV: Boolean, videos: List<ResponseItem>) {
+    private fun initializePlayer(isTV: Boolean, videos: List<Ads>) {
         val loadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(30000, 60000, 5000, 10000)
             .build()
@@ -210,7 +212,7 @@ class VideoPlayerActivity : ComponentActivity() {
                         binding.playerView.scaleX = 1.8f
                         binding.playerView.scaleY = 1.8f
                     }
-                    initializePlayer(isTV, result.data.response)
+                    initializePlayer(isTV, result.data.response.ads)
                     binding.progress.hideProgress()
                 }
 
@@ -223,9 +225,12 @@ class VideoPlayerActivity : ComponentActivity() {
     }
 
     private fun fetchViewAds() {
+        val userDetails = getUserDetails()
+        val request = ViewAdsRequest(userDetails[User.ID].toString(), userDetails[User.AUTH_TOKEN].toString())
         NetworkRetryHelper.checkAndCallWithRetry(this) {
-            viewModel.fetchAds()
+            viewModel.fetchAds(request)
         }
+        Log.d("requestLoading", request.toString())
     }
 
     @SuppressLint("SetTextI18n")
