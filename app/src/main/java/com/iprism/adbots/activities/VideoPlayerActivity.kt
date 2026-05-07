@@ -69,8 +69,36 @@ class VideoPlayerActivity : ComponentActivity() {
             .setLoadControl(loadControl)
             .build()
             .apply {
+                addListener(object : Player.Listener {
+
+                    override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+                        super.onMediaItemTransition(mediaItem, reason)
+                        mediaItem?.mediaId?.let { adId ->
+                            updateAdReputation(adId)
+                        }
+                    }
+
+                    override fun onIsPlayingChanged(isPlaying: Boolean) {
+                        if (isPlaying) {
+                            //updateDeviceStatus("online")
+                        } else {
+                            //updateDeviceStatus("offline")
+                        }
+                    }
+
+                    override fun onPlaybackStateChanged(state: Int) {
+                        if (state == Player.STATE_ENDED) {
+                            fetchViewAds()
+                        }
+                    }
+                })
                 val mediaItems =
-                    videos.map { response -> MediaItem.fromUri(Constants.IMAGES_BASE_URL + response.adLink) }
+                    videos.map { response ->
+                        MediaItem.Builder()
+                            .setUri(Constants.IMAGES_BASE_URL + response.adLink)
+                            .setMediaId(response.id)
+                            .build()
+                    }
                 setMediaItems(mediaItems)
                 repeatMode = ExoPlayer.REPEAT_MODE_OFF
                 videoScalingMode = if (isTV) {
@@ -81,22 +109,6 @@ class VideoPlayerActivity : ComponentActivity() {
                 prepare()
                 playWhenReady = true
             }
-        player!!.addListener(object : Player.Listener {
-
-            override fun onIsPlayingChanged(isPlaying: Boolean) {
-                if (isPlaying) {
-                    //updateDeviceStatus("online")
-                } else {
-                    //updateDeviceStatus("offline")
-                }
-            }
-
-            override fun onPlaybackStateChanged(state: Int) {
-                if (state == Player.STATE_ENDED) {
-                    fetchViewAds()
-                }
-            }
-        })
         binding.playerView.player = player
         binding.playerView.keepScreenOn = true
         if (isTV) {
