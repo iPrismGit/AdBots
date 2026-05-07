@@ -60,6 +60,7 @@ class VideoPlayerActivity : ComponentActivity() {
 
     @OptIn(UnstableApi::class)
     private fun initializePlayer(isTV: Boolean, videos: List<Ads>) {
+        player?.release()
         val loadControl = DefaultLoadControl.Builder()
             .setBufferDurationsMs(30000, 60000, 5000, 10000)
             .build()
@@ -70,7 +71,7 @@ class VideoPlayerActivity : ComponentActivity() {
                 val mediaItems =
                     videos.map { response -> MediaItem.fromUri(Constants.IMAGES_BASE_URL + response.adLink) }
                 setMediaItems(mediaItems)
-                repeatMode = ExoPlayer.REPEAT_MODE_ALL
+                repeatMode = ExoPlayer.REPEAT_MODE_OFF
                 videoScalingMode = if (isTV) {
                     C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
                 } else {
@@ -89,18 +90,11 @@ class VideoPlayerActivity : ComponentActivity() {
                 }
             }
 
-            /*  override fun onPlaybackStateChanged(state: Int) {
-                  when (state) {
-                      Player.STATE_READY -> {
-                          if (player!!.playWhenReady) showOnlineStatus()
-                      }
-                      Player.STATE_BUFFERING,
-                      Player.STATE_IDLE,
-                      Player.STATE_ENDED -> {
-                          showOfflineStatus()
-                      }
-                  }
-              }*/
+            override fun onPlaybackStateChanged(state: Int) {
+                if (state == Player.STATE_ENDED) {
+                    fetchViewAds()
+                }
+            }
         })
         binding.playerView.player = player
         binding.playerView.keepScreenOn = true
@@ -126,6 +120,7 @@ class VideoPlayerActivity : ComponentActivity() {
         }
 
         binding.playerView.post {
+            binding.playerView.overlayFrameLayout?.removeAllViews()
             binding.playerView.overlayFrameLayout?.addView(logo)
 
            /* if (isTV) {
