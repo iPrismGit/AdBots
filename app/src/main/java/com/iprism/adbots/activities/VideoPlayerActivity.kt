@@ -227,6 +227,10 @@ class VideoPlayerActivity : ComponentActivity() {
                 is UiState.Error -> {
                     Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
                     binding.progress.hideProgress()
+                    if (result.message.contains("Your account is inactive") || result.message.contains("token not verified")) {
+                        val user = User(applicationContext)
+                        user.logoutUser()
+                    }
                 }
             }
         }
