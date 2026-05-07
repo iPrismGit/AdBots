@@ -5,7 +5,8 @@ object Constants {
     const val BASE_URL = "https://uzzto.com/adbots/api/api/"
     const val IMAGES_BASE_URL = "https://uzzto.com/adbots/"
 
-    const val VIEW_ADDS_ENDPOINT = "view_ads"
+    /*const val VIEW_ADDS_ENDPOINT = "view_ads"*/
+    const val VIEW_ADDS_ENDPOINT = "view_tv_ads_wo_pagination"
     const val LOGIN_ENDPOINT = "user_login"
     const val UPDATE_DEVICE_STATUS_ENDPOINT = "update_device_status"
 }
