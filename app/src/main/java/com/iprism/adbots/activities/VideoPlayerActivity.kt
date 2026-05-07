@@ -27,6 +27,7 @@ import com.iprism.adbots.databinding.ActivityVideoPlayerBinding
 import com.iprism.adbots.models.Ads
 import com.iprism.adbots.models.ResponseItem
 import com.iprism.adbots.models.ViewAdsRequest
+import com.iprism.adbots.models.updateadreputation.UpdateAdReputationRequest
 import com.iprism.adbots.models.updatedevicestatus.UpdateDeviceStatusRequest
 import com.iprism.adbots.repository.AdsRepository
 import com.iprism.adbots.utils.Constants
@@ -251,6 +252,15 @@ class VideoPlayerActivity : ComponentActivity() {
         val request = UpdateDeviceStatusRequest(status, userDetails[User.ID].toString())
         NetworkRetryHelper.checkAndCallWithRetry(this, request) {
             viewModel.updateDeviceStatus(request)
+        }
+        Log.d("requestLoading", request.toString())
+    }
+
+    private fun updateAdReputation(adId : String) {
+        val userDetails = getUserDetails()
+        val request = UpdateAdReputationRequest(adId, userDetails[User.ID].toString())
+        NetworkRetryHelper.checkAndCallWithRetry(this, request) {
+            viewModel.updateAdReputation(request)
         }
         Log.d("requestLoading", request.toString())
     }

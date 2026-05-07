@@ -9,4 +9,5 @@ object Constants {
     const val VIEW_ADDS_ENDPOINT = "view_tv_ads_wo_pagination"
     const val LOGIN_ENDPOINT = "user_login"
     const val UPDATE_DEVICE_STATUS_ENDPOINT = "update_device_status"
+    const val UPDATE_AD_REPUTATION_ENDPOINT = "update_ad_reputations"
 }
