@@ -37,6 +37,7 @@ import com.iprism.adbots.utils.User
 import com.iprism.adbots.utils.getUserDetails
 import com.iprism.adbots.utils.hideProgress
 import com.iprism.adbots.utils.showProgress
+import com.iprism.adbots.utils.showToast
 import com.iprism.adbots.viewmodels.ViewModelFactory
 import com.iprism.adbots.viewmodels.AdsViewModel
 import java.util.concurrent.TimeUnit
@@ -220,7 +221,11 @@ class VideoPlayerActivity : ComponentActivity() {
                         binding.playerView.scaleX = 1.8f
                         binding.playerView.scaleY = 1.8f
                     }
-                    initializePlayer(isTV, result.data.response.ads)
+                    if (result.data.response.ads.isNotEmpty()) {
+                        initializePlayer(isTV, result.data.response.ads)
+                    } else {
+                        showToast("No videos to play")
+                    }
                     binding.progress.hideProgress()
                 }
 
