@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.Toast
@@ -222,9 +223,16 @@ class VideoPlayerActivity : ComponentActivity() {
                         binding.playerView.scaleY = 1.8f
                     }
                     if (result.data.response.ads.isNotEmpty()) {
+                        binding.noVideosLayout.visibility = View.GONE
+                        binding.playerView.visibility = View.VISIBLE
                         initializePlayer(isTV, result.data.response.ads)
                     } else {
-                        showToast("No videos to play")
+                        binding.noVideosLayout.visibility = View.VISIBLE
+                        binding.playerView.visibility = View.GONE
+                        player?.release()
+                        player = null
+                        // Retry fetching ads after 30 seconds
+                        binding.root.postDelayed({ fetchViewAds() }, 30000)
                     }
                     binding.progress.hideProgress()
                 }
